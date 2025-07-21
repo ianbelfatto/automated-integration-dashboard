@@ -71,7 +71,7 @@ Navigate into the backend directory, create a virtual environment, install depen
 
 Bash
 
-cd backend
+```cd backend
 
 # Create a Python virtual environment
 python -m venv venv
@@ -91,7 +91,8 @@ pip install -r requirements.txt
 # This will also create the SQLite database (posts.db) and seed initial data if it doesn't exist
 python app.py
 # Or for production-like local testing:
-# gunicorn app:app -b 127.0.0.1:5000
+# gunicorn app:app -b 127.0.0.1:5000```
+
 The backend server will typically run on http://127.0.0.1:5000.
 
 ### 3. Frontend Setup (Vue.js)
@@ -99,14 +100,14 @@ Open a new terminal tab/window, navigate into the frontend directory, and instal
 
 Bash
 
-cd ../frontend # If you are still in the backend directory
+```cd ../frontend # If you are still in the backend directory
 # Or from the project root: cd frontend
 
 # Install frontend dependencies
 npm install
 
 # Run the Vue.js development server
-npm run serve
+npm run serve```
 The frontend application will typically run on http://localhost:8080 (or another port if 8080 is in use).
 
 ### 4. Open in Browser
