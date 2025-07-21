@@ -46,7 +46,7 @@ export default {
       this.message = "";
       this.isSuccess = false;
       try {
-        const response = await fetch("http://127.0.0.1:5000/api/create_post", {
+        const response = await fetch("https://my-dashboard-backend-3qdq.onrender.com/api/create_post", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
