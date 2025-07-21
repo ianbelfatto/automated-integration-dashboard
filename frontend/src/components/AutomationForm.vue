@@ -46,17 +46,20 @@ export default {
       this.message = "";
       this.isSuccess = false;
       try {
-        const response = await fetch("https://my-dashboard-backend-3qdq.onrender.com/api/create_post", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: this.title,
-            body: this.body,
-            userId: 1,
-          }), // userId is required by JSONPlaceholder
-        });
+        const response = await fetch(
+          "https://my-dashboard-backend-3qdq.onrender.com/api/create_post",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title: this.title,
+              body: this.body,
+              userId: 1,
+            }), // userId is required by JSONPlaceholder
+          }
+        );
 
         const data = await response.json();
         if (data.success) {
