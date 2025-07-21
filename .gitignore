@@ -1,0 +1,21 @@
+# Git ignore for automated-integration-dashboard project
+
+# Python specific
+venv/           # Python virtual environment
+__pycache__/    # Python compiled bytecode
+*.pyc
+*.sqlite        # SQLite database files (like posts.db) - generally don't commit these
+.env            # Environment variables (if you ever add them)
+
+# Node.js specific
+frontend/node_modules/  # Node.js dependencies
+frontend/dist/          # Vue.js build output (you deploy this, but don't commit source)
+
+# Operating System generated files
+.DS_Store       # macOS specific
+Thumbs.db       # Windows specific
+
+# Editor specific files
+.vscode/        # VS Code settings (optional, you might want to commit some)
+*.sublime-project
+*.sublime-workspace
