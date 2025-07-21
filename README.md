@@ -1,8 +1,5 @@
 # Automated Integration Dashboard
 
-![Dashboard Screenshot Placeholder](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
-*(Consider replacing this placeholder with a screenshot of your live dashboard!)*
-
 ## Project Description
 
 This project features a full-stack web application designed as a content management dashboard. It demonstrates the seamless integration between a modern frontend framework (Vue.js) and a robust Python backend (Flask), showcasing data persistence through a self-managed database and interaction with external APIs. The dashboard allows users to view, create, and manage content, providing a practical example of a deployed, interactive web application.
