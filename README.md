@@ -1,5 +1,3 @@
-Markdown
-
 # Automated Integration Dashboard
 
 ![Dashboard Screenshot Placeholder](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
@@ -45,7 +43,7 @@ This project leverages the following technologies:
 * **Flask-SQLAlchemy:** Flask extension for ORM (Object-Relational Mapping) with SQLAlchemy, simplifying database interactions.
 * **Flask-CORS:** Enables Cross-Origin Resource Sharing for secure communication between frontend and backend.
 * **Gunicorn:** Python WSGI HTTP Server for production deployment.
-   * **Requests:** HTTP library for making external API calls (used for comments).
+* **Requests:** HTTP library for making external API calls (used for comments).
 
 ### Database
 
@@ -64,7 +62,7 @@ To run this project on your local machine for development:
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/](https://github.com/)[YourGitHubUsername]/automated-integration-dashboard.git
+git clone https://github.com/[YourGitHubUsername]/automated-integration-dashboard.git
 cd automated-integration-dashboard
 2. Backend Setup (Flask/Python)
 Navigate into the backend directory, create a virtual environment, install dependencies, and set up the database.
