@@ -64,7 +64,9 @@ To run this project on your local machine for development:
 ```bash
 git clone https://github.com/[YourGitHubUsername]/automated-integration-dashboard.git
 cd automated-integration-dashboard
-2. Backend Setup (Flask/Python)
+```
+
+### 2. Backend Setup (Flask/Python)
 Navigate into the backend directory, create a virtual environment, install dependencies, and set up the database.
 
 Bash
@@ -92,7 +94,7 @@ python app.py
 # gunicorn app:app -b 127.0.0.1:5000
 The backend server will typically run on http://127.0.0.1:5000.
 
-3. Frontend Setup (Vue.js)
+### 3. Frontend Setup (Vue.js)
 Open a new terminal tab/window, navigate into the frontend directory, and install dependencies.
 
 Bash
@@ -107,10 +109,11 @@ npm install
 npm run serve
 The frontend application will typically run on http://localhost:8080 (or another port if 8080 is in use).
 
-4. Open in Browser
+### 4. Open in Browser
 Once both the backend and frontend servers are running, open your web browser and go to http://localhost:8080 to interact with the dashboard.
 
-Future Enhancements (Ideas for Continued Development)
+### Future Enhancements (Ideas for Continued Development)
+
 User Authentication & Authorization: Implement user login, registration, and protect API routes with tokens (e.g., JWT).
 
 CRUD for Comments: Extend the backend to manage comments in its own database, not just rely on JSONPlaceholder.
