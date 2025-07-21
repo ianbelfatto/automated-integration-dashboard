@@ -1,34 +1,76 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import requests # Used to make HTTP requests to JSONPlaceholder
+from flask_sqlalchemy import SQLAlchemy
+import os # For path handling
+import requests # Still used for comments, but not for posts anymore
 
 app = Flask(__name__)
 CORS(app) # Enable CORS (Cross-Origin Resource Sharing) for your frontend
 
-# JSONPlaceholder base URL
-JSONPLACEHOLDER_BASE_URL = "https://jsonplaceholder.typicode.com"
+# Configure SQLAlchemy
+# Use SQLite: database file will be in your instance folder (usually 'backend/instance')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Suppress warning
 
+db = SQLAlchemy(app)
+
+# Define your database model (this is your 'Post' table)
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    # You could add 'userId' if you want, but it's not strictly necessary for persistence
+    # userId = db.Column(db.Integer, default=1) # Example, if you wanted to track who made posts
+
+    def __repr__(self):
+        return f'<Post {self.id}: {self.title}>'
+
+    def to_dict(self):
+        # Helper to convert a Post object to a dictionary for JSON response
+        return {
+            'id': self.id,
+            'title': self.title,
+            'body': self.body
+        }
+
+# --- Database Setup (Run this ONCE to create the database file and table) ---
+def create_database():
+    with app.app_context(): # Essential for Flask extensions to work outside of request context
+        db.create_all() # This creates all defined tables
+        print("Database tables created!")
+        # Optional: Add some initial data if the database is empty
+        if not Post.query.first(): # Check if any posts exist
+            initial_posts = [
+                Post(title="First Demo Post", body="This is the content of the first demo post."),
+                Post(title="Another Sample Post", body="Here's some more content for a sample post.")
+            ]
+            db.session.add_all(initial_posts)
+            db.session.commit()
+            print("Initial posts added to the database.")
+
+# This block ensures the database is created and seeded on first run (like on Render)
+if not os.path.exists('instance/posts.db'): # Check if db file exists
+    create_database()
+
+# --- API Endpoints ---
 @app.route('/')
 def hello_world():
-    return "Backend for JSONPlaceholder is running!"
+    return "Backend with database is running!"
 
 @app.route('/api/get_posts', methods=['GET'])
 def get_posts():
-    """Fetches a list of posts from JSONPlaceholder."""
-    try:
-        response = requests.get(f"{JSONPLACEHOLDER_BASE_URL}/posts?_limit=5") # Get first 5 posts
-        response.raise_for_status() # Raise an exception for HTTP errors (4xx or 5xx)
-        posts = response.json()
-        return jsonify({"success": True, "data": posts})
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching posts: {e}")
-        return jsonify({"success": False, "message": str(e)}), 500
+    """Fetches all posts from your database."""
+    # Query all posts from the Post table, ordered by ID (newest first if IDs are sequential)
+    posts = Post.query.order_by(Post.id.desc()).all()
+    # Convert Post objects to dictionaries for JSON serialization
+    return jsonify({"success": True, "data": [post.to_dict() for post in posts]})
 
 @app.route('/api/get_comments', methods=['GET'])
 def get_comments():
-    """Fetches a list of comments from JSONPlaceholder."""
+    """Fetches a list of comments from JSONPlaceholder (still external)."""
+    JSONPLACEHOLDER_BASE_URL = "https://jsonplaceholder.typicode.com" # Still needed for comments
     try:
-        response = requests.get(f"{JSONPLACEHOLDER_BASE_URL}/comments?_limit=5") # Get first 5 comments
+        response = requests.get(f"{JSONPLACEHOLDER_BASE_URL}/comments?_limit=5")
         response.raise_for_status()
         comments = response.json()
         return jsonify({"success": True, "data": comments})
@@ -38,20 +80,24 @@ def get_comments():
 
 @app.route('/api/create_post', methods=['POST'])
 def create_post():
-    """Creates a new post on JSONPlaceholder (simulated)."""
-    data = request.get_json() # Get the JSON data sent from the frontend
+    """Creates a new post in your database."""
+    data = request.get_json()
     if not data or 'title' not in data or 'body' not in data:
         return jsonify({"success": False, "message": "Title and body are required"}), 400
 
-    # JSONPlaceholder uses a fake POST request. It will return the new object
-    # but won't actually store it. This is perfect for a demo!
     try:
-        response = requests.post(f"{JSONPLACEHOLDER_BASE_URL}/posts", json=data)
-        response.raise_for_status()
-        new_post = response.json()
-        return jsonify({"success": True, "message": "Post created successfully", "data": new_post}), 201
-    except requests.exceptions.RequestException as e:
-        print(f"Error creating post: {e}")
+        # Create a new Post object
+        new_post = Post(title=data['title'], body=data['body'])
+        db.session.add(new_post) # Add to the session
+        db.session.commit() # Save to database
+
+        # Refresh the object to get its ID generated by the database
+        db.session.refresh(new_post)
+
+        return jsonify({"success": True, "message": "Post created successfully in DB", "data": new_post.to_dict()}), 201
+    except Exception as e:
+        print(f"Error creating post in DB: {e}")
+        db.session.rollback() # Rollback if something went wrong
         return jsonify({"success": False, "message": str(e)}), 500
 
 if __name__ == '__main__':
