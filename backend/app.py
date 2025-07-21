@@ -55,4 +55,5 @@ def create_post():
         return jsonify({"success": False, "message": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000) # Run the Flask app on port 5000
+    # When running locally, use debug mode
+    app.run(debug=True, port=5000)
